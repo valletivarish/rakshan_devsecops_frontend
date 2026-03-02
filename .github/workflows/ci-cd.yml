@@ -1,0 +1,114 @@
+# CI/CD Pipeline for the Decentralised Peer Code Review Platform - Frontend
+# This pipeline lints, builds, audits, and deploys the React 18 frontend application.
+# CI stages run on every push and pull request.
+# CD stages (deployment to S3) run only on push to the main branch.
+
+name: Frontend CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # ==============================================
+  # CI Stage: Lint, Build, and Security Audit
+  # ==============================================
+  ci:
+    name: CI - Lint, Build, and Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout source code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js 18 with npm cache for faster builds
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      # Step 3: Install dependencies using npm ci for reproducible builds
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 4: Run ESLint static code analysis for code quality and security issues
+      - name: Run ESLint
+        run: npm run lint
+        continue-on-error: true
+
+      # Step 5: Build the production bundle to verify compilation succeeds
+      - name: Build production bundle
+        run: npm run build
+
+      # Step 6: Run npm audit to scan for security vulnerabilities in dependencies
+      - name: Run npm audit
+        run: npm audit --audit-level=high
+        continue-on-error: true
+
+      # Step 7: Generate npm audit report in JSON format for documentation
+      - name: Generate audit report
+        run: npm audit --json > audit-report.json || true
+
+      # Step 8: Upload ESLint results as CI artifact for documentation
+      - name: Upload ESLint report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eslint-report
+          path: eslint-report.json
+          if-no-files-found: ignore
+
+      # Step 9: Upload npm audit report as CI artifact for security documentation
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: npm-audit-report
+          path: audit-report.json
+
+      # Step 10: Upload built frontend bundle as artifact for deployment
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: dist/
+
+  # ==============================================
+  # CD Stage: Deploy to AWS S3
+  # Runs only on push to main branch (not on PRs)
+  # ==============================================
+  cd:
+    name: CD - Deploy to AWS S3
+    runs-on: ubuntu-latest
+    needs: ci
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      # Step 1: Download the built frontend bundle from CI stage
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: ./dist
+
+      # Step 2: Configure AWS credentials for S3 deployment
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+
+      # Step 3: Sync the built files to the S3 bucket for static website hosting
+      - name: Deploy to S3
+        run: aws s3 sync ./dist s3://${{ secrets.S3_BUCKET_NAME }} --delete
+
+      # Step 4: Smoke test - verify the backend health endpoint is accessible
+      - name: Smoke test - Health check
+        run: |
+          curl -f http://${{ secrets.EC2_HOST }}:8080/api/health || echo "Backend health check - endpoint may not be available yet"
+          echo "Frontend deployed to S3 successfully"

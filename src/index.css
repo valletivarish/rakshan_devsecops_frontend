@@ -1,0 +1,160 @@
+/**
+ * index.css - CSS Reset and Base Styles
+ *
+ * Provides a consistent cross-browser baseline by resetting default
+ * user-agent styles. Also sets global typography, box-sizing, and
+ * smooth scrolling behaviour for the entire application.
+ */
+
+/* -------------------------------------------------------------------------
+ * 1. Box-Sizing Reset
+ * Apply border-box globally so padding and border are included in
+ * the element's total width and height calculations.
+ * ------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* -------------------------------------------------------------------------
+ * 2. Margin and Padding Reset
+ * Remove default margins and paddings from all elements to avoid
+ * unexpected spacing across different browsers.
+ * ------------------------------------------------------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* -------------------------------------------------------------------------
+ * 3. Root / HTML Element
+ * Enable smooth scrolling for anchor-based navigation and set the base
+ * font size to 16px (browser default) for consistent rem calculations.
+ * ------------------------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* -------------------------------------------------------------------------
+ * 4. Body Defaults
+ * Set the default font family, line height, and text rendering mode.
+ * The background and text colours are inherited from App.css custom
+ * properties to support theming.
+ * ------------------------------------------------------------------------- */
+body {
+  font-family: "Inter", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+    "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+}
+
+/* -------------------------------------------------------------------------
+ * 5. Media Reset
+ * Prevent images, videos, and other embedded content from overflowing
+ * their containers. Display as block to remove bottom whitespace.
+ * ------------------------------------------------------------------------- */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* -------------------------------------------------------------------------
+ * 6. Form Element Reset
+ * Ensure form controls inherit the global font settings instead of
+ * using their own browser-specific defaults.
+ * ------------------------------------------------------------------------- */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* -------------------------------------------------------------------------
+ * 7. Typography Reset
+ * Prevent text overflow in paragraphs and headings by enabling
+ * balanced word wrapping.
+ * ------------------------------------------------------------------------- */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+/* -------------------------------------------------------------------------
+ * 8. List Reset
+ * Remove default list styling (bullets, numbers) so lists can be
+ * styled from scratch in component-level CSS.
+ * ------------------------------------------------------------------------- */
+ul,
+ol {
+  list-style: none;
+}
+
+/* -------------------------------------------------------------------------
+ * 9. Anchor Reset
+ * Remove default underline and inherit text colour so links blend
+ * naturally with surrounding text unless explicitly styled.
+ * ------------------------------------------------------------------------- */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* -------------------------------------------------------------------------
+ * 10. Table Reset
+ * Collapse table borders and ensure consistent spacing.
+ * ------------------------------------------------------------------------- */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* -------------------------------------------------------------------------
+ * 11. Root Element
+ * The React root container should fill the full viewport height so
+ * that layouts relying on flex/grid stretching behave correctly.
+ * ------------------------------------------------------------------------- */
+#root {
+  min-height: 100vh;
+}
+
+/* -------------------------------------------------------------------------
+ * 12. Scrollbar Styling (WebKit browsers)
+ * Provide a slim, unobtrusive scrollbar that fits the dark theme.
+ * ------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a2e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4a4a6a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5a5a7a;
+}
