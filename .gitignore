@@ -18,7 +18,6 @@ Thumbs.db
 # Environment and secrets
 .env
 .env.local
-.env.production
 
 # Terraform state files
 terraform/.terraform/
