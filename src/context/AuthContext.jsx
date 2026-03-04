@@ -97,7 +97,15 @@ export function AuthProvider({ children }) {
     if (storedToken && !isTokenExpired(storedToken)) {
       /* Token exists and is still valid -- restore session */
       setToken(storedToken);
-      setUser(storedUser ? JSON.parse(storedUser) : parseJwtPayload(storedToken));
+      const parsed = storedUser ? JSON.parse(storedUser) : null;
+      if (parsed && parsed.userId) {
+        setUser(parsed);
+      } else {
+        /* Stale cache missing userId — clear so user re-logs with full data */
+        localStorage.removeItem(TOKEN_STORAGE_KEY);
+        localStorage.removeItem(USER_STORAGE_KEY);
+        setToken(null);
+      }
     } else if (storedToken) {
       /* Token exists but has expired -- clean up */
       localStorage.removeItem(TOKEN_STORAGE_KEY);
@@ -120,7 +128,12 @@ export function AuthProvider({ children }) {
 
       /* The backend may return the token in different shapes; handle common patterns */
       const receivedToken = response.data.token || response.data.jwt || response.data.accessToken;
-      const receivedUser = response.data.user || parseJwtPayload(receivedToken);
+      /* Backend returns { token, userId, username, role } at the top level */
+      const receivedUser = response.data.user || {
+        userId: response.data.userId,
+        username: response.data.username,
+        role: response.data.role,
+      };
 
       if (!receivedToken) {
         toast.error("Login failed: no token received from the server.");
@@ -160,7 +173,11 @@ export function AuthProvider({ children }) {
       const receivedToken = response.data.token || response.data.jwt || response.data.accessToken;
 
       if (receivedToken) {
-        const receivedUser = response.data.user || parseJwtPayload(receivedToken);
+        const receivedUser = response.data.user || {
+          userId: response.data.userId,
+          username: response.data.username,
+          role: response.data.role,
+        };
         localStorage.setItem(TOKEN_STORAGE_KEY, receivedToken);
         localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(receivedUser));
         setToken(receivedToken);

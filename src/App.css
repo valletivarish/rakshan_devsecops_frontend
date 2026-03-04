@@ -189,6 +189,57 @@ body {
   text-decoration: underline;
 }
 
+.demo-credentials {
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  background-color: var(--bg-base);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.demo-credentials-title {
+  text-align: center;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.demo-credentials-list {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+}
+
+.demo-credential-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-xs) var(--space-md);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.demo-credential-btn:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+
+.demo-credential-btn .demo-user {
+  font-weight: 600;
+  font-size: var(--font-sm);
+  color: var(--text-primary);
+}
+
+.demo-credential-btn .demo-role {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
 /* =========================================================================
  * 3. NAVBAR
  * Fixed horizontal navigation bar at the top of the viewport.

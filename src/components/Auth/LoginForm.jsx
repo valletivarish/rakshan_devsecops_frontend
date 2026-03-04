@@ -64,6 +64,7 @@ function LoginForm() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(loginSchema),
@@ -157,6 +158,31 @@ function LoginForm() {
             {isSubmitting ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
+
+        {/* Demo credentials box */}
+        <div className="demo-credentials">
+          <p className="demo-credentials-title">Demo Credentials</p>
+          <div className="demo-credentials-list">
+            {[
+              { username: 'admin', password: 'admin123', role: 'Admin' },
+              { username: 'alice', password: 'alice123', role: 'User' },
+              { username: 'bob', password: 'bob123', role: 'User' },
+            ].map((cred) => (
+              <button
+                key={cred.username}
+                type="button"
+                className="demo-credential-btn"
+                onClick={() => {
+                  setValue('username', cred.username);
+                  setValue('password', cred.password);
+                }}
+              >
+                <span className="demo-user">{cred.username}</span>
+                <span className="demo-role">{cred.role}</span>
+              </button>
+            ))}
+          </div>
+        </div>
 
         {/* Footer link to registration page */}
         <div className="auth-footer">

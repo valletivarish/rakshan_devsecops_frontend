@@ -117,16 +117,23 @@ function Dashboard() {
   /* ------ Prepare Chart Data ------ */
 
   /*
-   * Transform the submissionsByLanguage data for the bar chart.
-   * If the backend does not provide this field, fall back to an empty array.
+   * Transform the submissionsByLanguage map from the backend ({ "Java": 2, "Python": 1 })
+   * into an array of objects ({ language, count }) that Recharts expects.
    */
-  const languageData = dashboardData?.submissionsByLanguage || [];
+  const rawLanguage = dashboardData?.submissionsByLanguage;
+  const languageData = rawLanguage && typeof rawLanguage === 'object' && !Array.isArray(rawLanguage)
+    ? Object.entries(rawLanguage).map(([language, count]) => ({ language, count }))
+    : Array.isArray(rawLanguage) ? rawLanguage : [];
 
   /*
-   * Transform the submissionsByStatus data for the pie chart.
-   * If the backend does not provide this field, fall back to an empty array.
+   * Build the submissionsByStatus array from the individual status count fields
+   * returned by the backend (pendingReviews, underReview, completedReviews).
    */
-  const statusData = dashboardData?.submissionsByStatus || [];
+  const statusData = [
+    dashboardData?.pendingReviews && { status: 'PENDING REVIEW', count: dashboardData.pendingReviews },
+    dashboardData?.underReview && { status: 'UNDER REVIEW', count: dashboardData.underReview },
+    dashboardData?.completedReviews && { status: 'REVIEWED', count: dashboardData.completedReviews },
+  ].filter(Boolean);
 
   return (
     <div>
