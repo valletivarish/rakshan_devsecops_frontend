@@ -214,6 +214,8 @@ function Dashboard() {
                       borderRadius: '8px',
                       color: '#e8e8f0',
                     }}
+                    labelStyle={{ color: '#e8e8f0' }}
+                    itemStyle={{ color: '#a0a0b8' }}
                   />
 
                   <Legend wrapperStyle={{ color: '#a0a0b8' }} />
@@ -282,6 +284,8 @@ function Dashboard() {
                       borderRadius: '8px',
                       color: '#e8e8f0',
                     }}
+                    labelStyle={{ color: '#e8e8f0' }}
+                    itemStyle={{ color: '#a0a0b8' }}
                   />
 
                   <Legend wrapperStyle={{ color: '#a0a0b8' }} />
