@@ -247,9 +247,17 @@ function Dashboard() {
                     cx="50%"
                     cy="50%"
                     labelLine={true}
-                    label={({ name, percent }) =>
-                      `${name} (${(percent * 100).toFixed(0)}%)`
-                    }
+                    label={({ name, percent, x, y, textAnchor }) => (
+                      <text
+                        x={x}
+                        y={y}
+                        textAnchor={textAnchor}
+                        fill="#e8e8f0"
+                        fontSize={12}
+                      >
+                        {`${name} (${(percent * 100).toFixed(0)}%)`}
+                      </text>
+                    )}
                     outerRadius={100}
                     dataKey="count"
                     nameKey="status"
