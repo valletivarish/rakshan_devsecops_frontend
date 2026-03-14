@@ -140,15 +140,15 @@ function ReviewList() {
                 <tr key={review.id}>
                   {/* Submission title with link to its detail page */}
                   <td>
-                    {review.submissionId ? (
+                    {(review.codeSubmissionId || review.submissionId) ? (
                       <Link
-                        to={`/submissions/${review.submissionId || review.codeSubmissionId}`}
+                        to={`/submissions/${review.codeSubmissionId || review.submissionId}`}
                         style={{ color: 'var(--color-primary)' }}
                       >
-                        {review.submissionTitle || `Submission #${review.submissionId || review.codeSubmissionId}`}
+                        {review.codeSubmissionTitle || review.submissionTitle || `Submission #${review.codeSubmissionId || review.submissionId}`}
                       </Link>
                     ) : (
-                      review.submissionTitle || 'Unknown Submission'
+                      review.codeSubmissionTitle || review.submissionTitle || 'Unknown Submission'
                     )}
                   </td>
 
@@ -164,9 +164,9 @@ function ReviewList() {
 
                   {/* Overall quality score */}
                   <td>
-                    {review.qualityScore !== undefined && review.qualityScore !== null ? (
+                    {(review.averageScore !== undefined && review.averageScore !== null) || (review.qualityScore !== undefined && review.qualityScore !== null) ? (
                       <span className="badge badge-success">
-                        {review.qualityScore}
+                        {(review.averageScore || review.qualityScore || 0).toFixed(1)}
                       </span>
                     ) : (
                       <span className="badge badge-primary">-</span>
@@ -183,7 +183,7 @@ function ReviewList() {
                   {/* View action: navigates to the submission detail */}
                   <td>
                     <Link
-                      to={`/submissions/${review.submissionId || review.codeSubmissionId}`}
+                      to={`/submissions/${review.codeSubmissionId || review.submissionId}`}
                       className="btn btn-secondary btn-sm"
                     >
                       View Submission

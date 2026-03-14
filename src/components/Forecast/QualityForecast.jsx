@@ -352,66 +352,61 @@ function QualityForecast() {
                 Forecast Results
               </h3>
 
-              {/*
-               * Display the forecast data. The response may be an array
-               * of data points or an object with a forecast property.
-               */}
-              {(() => {
-                /* Normalise the trend data to an array of data points */
-                const dataPoints = Array.isArray(trendData)
-                  ? trendData
-                  : trendData.forecast || trendData.predictions || trendData.data || [];
+              {/* Display forecast results as stat cards */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                  gap: 'var(--space-lg)',
+                  marginBottom: 'var(--space-md)',
+                }}
+              >
+                {/* Predicted score */}
+                <div className="stat-card">
+                  <span className="stat-value">
+                    {trendData.predictedScore !== undefined
+                      ? Number(trendData.predictedScore).toFixed(2)
+                      : 'N/A'}
+                  </span>
+                  <span className="stat-label">Predicted Score</span>
+                </div>
 
-                if (dataPoints.length === 0) {
-                  return (
-                    <p style={{ color: 'var(--text-muted)' }}>
-                      No forecast data points available.
-                    </p>
-                  );
-                }
+                {/* Trend direction */}
+                <div className="stat-card">
+                  <span
+                    className={getTrendBadgeClass(trendData.trendDirection)}
+                    style={{ fontSize: 'var(--font-lg)' }}
+                  >
+                    {getTrendIndicator(trendData.trendDirection)}
+                  </span>
+                  <span className="stat-label">Trend Direction</span>
+                </div>
 
-                return (
-                  <div className="table-container">
-                    <table className="table">
-                      <thead>
-                        <tr>
-                          <th>Period</th>
-                          <th>Predicted Score</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {dataPoints.map((point, index) => (
-                          <tr key={index}>
-                            {/* Period label: uses the data point's period field or generates one */}
-                            <td>
-                              {point.period || point.label || `Period ${index + 1}`}
-                            </td>
+                {/* Confidence */}
+                <div className="stat-card">
+                  <span className="stat-value" style={{ fontSize: 'var(--font-2xl)' }}>
+                    {trendData.confidence !== undefined
+                      ? `${(Number(trendData.confidence) * 100).toFixed(1)}%`
+                      : 'N/A'}
+                  </span>
+                  <span className="stat-label">Confidence</span>
+                </div>
 
-                            {/* Predicted score value */}
-                            <td>
-                              <span className="badge badge-info">
-                                {point.predictedScore !== undefined
-                                  ? Number(point.predictedScore).toFixed(2)
-                                  : point.score !== undefined
-                                    ? Number(point.score).toFixed(2)
-                                    : point.value !== undefined
-                                      ? Number(point.value).toFixed(2)
-                                      : 'N/A'}
-                              </span>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                {/* Data points used */}
+                {trendData.dataPointsUsed !== undefined && (
+                  <div className="stat-card">
+                    <span className="stat-value">
+                      {trendData.dataPointsUsed}
+                    </span>
+                    <span className="stat-label">Reviews Analyzed</span>
                   </div>
-                );
-              })()}
+                )}
+              </div>
 
-              {/* Display any overall trend summary from the response */}
-              {(trendData.summary || trendData.overallTrend) && (
+              {/* Explanation text */}
+              {trendData.explanation && (
                 <div
                   style={{
-                    marginTop: 'var(--space-md)',
                     backgroundColor: 'var(--bg-surface)',
                     borderRadius: 'var(--radius-md)',
                     padding: 'var(--space-md)',
@@ -422,7 +417,7 @@ function QualityForecast() {
                     Trend Summary
                   </strong>
                   <p style={{ color: 'var(--text-secondary)', margin: 0, lineHeight: 1.6 }}>
-                    {trendData.summary || trendData.overallTrend}
+                    {trendData.explanation}
                   </p>
                 </div>
               )}

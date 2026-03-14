@@ -29,7 +29,7 @@ function App() {
       fallback={
         <div className="loading-container">
           <div className="loading-spinner" />
-          <p>Loading...</p>
+          <p>Loading...</p> // Updated for CI/CD demonstration
         </div>
       }
     >
