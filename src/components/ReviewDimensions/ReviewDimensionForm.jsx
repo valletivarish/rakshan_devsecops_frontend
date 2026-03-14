@@ -44,13 +44,13 @@ const dimensionSchema = yup.object().shape({
     .string()
     .max(200, 'Description must not exceed 200 characters'),
 
-  /** Max score must be a number between 1 and 10 */
+  /** Max score must be a number between 1 and 5 */
   maxScore: yup
     .number()
     .typeError('Max score must be a number')
     .required('Max score is required')
     .min(1, 'Max score must be at least 1')
-    .max(10, 'Max score must not exceed 10')
+    .max(5, 'Max score must not exceed 5')
     .integer('Max score must be a whole number'),
 });
 
@@ -187,12 +187,12 @@ function ReviewDimensionForm({ dimension, onSuccess, onCancel }) {
 
         {/* Max Score field */}
         <div className="form-group">
-          <label htmlFor="dim-maxScore">Max Score (1-10)</label>
+          <label htmlFor="dim-maxScore">Max Score (1-5)</label>
           <input
             id="dim-maxScore"
             type="number"
             min={1}
-            max={10}
+            max={5}
             className={`form-control ${errors.maxScore ? 'error' : ''}`}
             style={{ maxWidth: '120px' }}
             {...register('maxScore')}
