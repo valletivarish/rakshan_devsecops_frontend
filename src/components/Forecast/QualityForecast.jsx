@@ -304,8 +304,8 @@ function QualityForecast() {
         </div>
         <div className="card-body">
           <p style={{ marginBottom: 'var(--space-md)' }}>
-            Forecast how the average review score will trend over upcoming periods.
-            Enter the number of future periods (weeks or months) to forecast.
+            Forecast how the average review score will trend over upcoming review cycles.
+            Enter the number of future reviews ahead to predict the expected score.
           </p>
 
           {/* Input and forecast button */}
