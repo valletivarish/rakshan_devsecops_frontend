@@ -55,7 +55,12 @@ const codeSubmissionService = {
    * @returns {Promise<import('axios').AxiosResponse>} The newly created submission
    */
   create(data) {
-    return api.post(SUBMISSIONS_BASE, data);
+    const payload = {
+      ...data,
+      code: data.codeContent || data.code,
+    };
+    delete payload.codeContent;
+    return api.post(SUBMISSIONS_BASE, payload);
   },
 
   /**
@@ -69,7 +74,12 @@ const codeSubmissionService = {
    * @returns {Promise<import('axios').AxiosResponse>} The updated submission
    */
   update(id, data) {
-    return api.put(`${SUBMISSIONS_BASE}/${id}`, data);
+    const payload = {
+      ...data,
+      code: data.codeContent || data.code,
+    };
+    delete payload.codeContent;
+    return api.put(`${SUBMISSIONS_BASE}/${id}`, payload);
   },
 
   /**
