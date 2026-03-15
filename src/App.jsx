@@ -50,6 +50,7 @@ function App() {
           <Route path="/submissions" element={<SubmissionList />} />
           <Route path="/submissions/new" element={<SubmissionForm />} />
           <Route path="/submissions/:id" element={<SubmissionDetail />} />
+          <Route path="/submissions/:id/edit" element={<SubmissionForm />} />
           <Route path="/reviews" element={<ReviewList />} />
           <Route path="/reviews/new" element={<ReviewForm />} />
           <Route path="/dimensions" element={<DimensionList />} />

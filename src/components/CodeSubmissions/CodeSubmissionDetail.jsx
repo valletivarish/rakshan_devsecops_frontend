@@ -163,6 +163,16 @@ function CodeSubmissionDetail() {
             Back to List
           </button>
 
+          {/* Edit button: only shown to the submission author */}
+          {user?.userId === submission.authorId && (
+            <button
+              className="btn btn-primary"
+              onClick={() => navigate(`/submissions/${id}/edit`)}
+            >
+              Edit Submission
+            </button>
+          )}
+
           {/*
            * Assign Reviewer button: only shown when the submission is
            * in PENDING_REVIEW status, meaning no reviewer has been assigned yet.
