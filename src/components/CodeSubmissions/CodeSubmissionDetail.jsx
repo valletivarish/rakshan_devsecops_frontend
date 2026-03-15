@@ -164,7 +164,7 @@ function CodeSubmissionDetail() {
           </button>
 
           {/* Edit button: only shown to the submission author */}
-          {user?.userId === submission.authorId && (
+          {user?.userId === submission.userId && (
             <button
               className="btn btn-primary"
               onClick={() => navigate(`/submissions/${id}/edit`)}
